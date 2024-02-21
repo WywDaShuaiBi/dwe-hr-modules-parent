@@ -1,1 +1,7 @@
-/target/
+log
+*.log
+target
+.xmodelgen
+.idea
+.settings
+node_modules
