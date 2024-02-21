@@ -1,0 +1,57 @@
+{
+	"shiftId": "655f03ae1a79c19dfdbf6f40",
+	"shiftName": "办公室行政班次",
+	"displayName": "08:30-17:30",
+	"isRestTimeOpen": true,
+	"seriousLateTime": 30,
+	"attendDays": 1,
+	"workTime": 480,
+	"flexible": {
+		"enable": true,
+		"permitLateMinutes": 15,
+		"permitEarlyMinutes": 15,
+		"demandWorkTimeMinutes": 480
+	},
+	"restTimeList": [
+		{
+			"end": {
+				"across": 0,
+				"beginMin": -1,
+				"endMin": -1,
+				"time": "13:00"
+			},
+			"start": {
+				"across": 0,
+				"beginMin": -1,
+				"endMin": -1,
+				"time": "12:00"
+			}
+		}
+	],
+	"sections": [
+		{
+			"end": {
+				"across": 0,
+				"beginMin": -1,
+				"endMin": -1,
+				"flexMinutes": [
+					15,
+					15
+				],
+				"freeCheck": false,
+				"time": "17:30"
+			},
+			"start": {
+				"across": 0,
+				"beginMin": 90,
+				"endMin": 30,
+				"flexMinutes": [
+					15,
+					15
+				],
+				"freeCheck": false,
+				"time": "08:30"
+			}
+		}
+	]
+}

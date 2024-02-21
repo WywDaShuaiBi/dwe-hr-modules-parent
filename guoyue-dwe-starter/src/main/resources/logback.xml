@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <contextName>dwe</contextName>
+    <property name="logPath" value="./log"/>
+    <property name="maxHistory" value="60"/>
+    <property name="charset" value="UTF-8" />
+
+    <!-- ConsoleAppender代表输出到控制台 -->
+    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger:\(%L\) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 日志输出文件 -->
+    <appender name="dwsoftLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger:\(%L\) - %msg%n
+            </pattern>
+            <charset>${charset}</charset>
+        </encoder>
+        <file>${logPath}/info/dwsoft.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logPath}/info/dwsoft%d.log</fileNamePattern>
+            <maxHistory>${maxHistory}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 性能相关的日志 -->
+    <appender name="performanceLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger:\(%L\) - %msg%n
+            </pattern>
+            <charset>${charset}</charset>
+        </encoder>
+        <file>${logPath}/performance.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logPath}/performance-%d.%i.log</fileNamePattern>
+            <totalSizeCap>10GB</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>5120KB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>20</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="webService" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger:\(%L\) - %msg%n
+            </pattern>
+            <charset>${charset}</charset>
+        </encoder>
+        <file>${logPath}/webService.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logPath}/webService%d.%i.log</fileNamePattern>
+            <totalSizeCap>10GB</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>5120KB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>20</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!--操作日志-->
+    <appender name="localLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder>
+            <pattern>%msg%n</pattern>
+            <charset>${charset}</charset>
+        </encoder>
+        <file>${logPath}/operlogs/log.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logPath}/operlogs/log%d.%i</fileNamePattern>
+            <totalSizeCap>10GB</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100 MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>1000</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="errorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 只记录ERROR级别日志，添加范围过滤，可以将该类型的日志特殊记录到某个位置 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger:\(%L\) - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logPath}/error/%d.log</fileNamePattern>
+            <!-- 日志最大的历史 60天 -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+    </appender>
+	
+	<!-- 当dwe配置 druid 为数据链接池同时配置kmss.jdbc.stat.enabled=true时，dwe 启动的时候报很多数据库对象已经存在，可以通过下面logger屏蔽 -->
+	<logger name="druid.sql.Statement" level="fatal" additivity="false"/>
+
+    <!--hibernate日志设置-->
+    <logger name="org.hibernate" level="warn"/>
+    <logger name="org.hibernate.type" level="error"/>
+    <logger name="org.hibernate.SQL" level="warn"/>
+    <logger name="org.hibernate.engine.StatefulPersistenceContext" level="error"/>
+    <logger name="org.hibernate.engine.internal.StatefulPersistenceContext" level="error"/>
+    <logger name="org.hibernate.ps.PreparedStatementCache" level="warn"/>
+    <logger name="org.hibernate.internal.util.xml.DTDEntityResolver" level="error"/>
+    <logger name="org.hibernate.tool.schema.internal.ExceptionHandlerLoggedImpl" additivity="false">
+        <level value="warn"/>
+        <appender-ref ref="errorLog"/>
+    </logger>
+
+    <!--开源组件日志设置-->
+    <logger name="com.opensymphony.oscache" level="error"/>
+    <logger name="org.apache.commons" level="error"/>
+    <logger name="org.springframework" level="warn"/>
+    <logger name="org.springframework.beans.GenericTypeAwarePropertyDescriptor" level="error"/>
+    <logger name="org.apache.cxf.wsdl.service.factory.ReflectionServiceFactoryBean" level="warn"/>
+    <logger name="org.apache.cxf.endpoint.ServerImpl" level="warn"/>
+    <logger name="org.springframework.beans.factory.xml.XmlBeanDefinitionReader" level="error"/>
+    <logger name="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping" level="warn"/>
+    <logger name="org.springframework.transaction.support" level="warn"/>
+    <logger name="org.springframework.transaction.interceptor" level="warn"/>
+	 <logger name="druid.sql" level="INFO"/>
+    <logger name="org.apache.shiro" level="INFO"/>
+    <logger name="org.mybatis.spring" level="INFO"/>
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.springframework.context" level="WARN"/>
+    <logger name="org.springframework.beans" level="WARN"/>
+    <logger name="com.baomidou.mybatisplus" level="INFO"/>
+    <logger name="org.apache.ibatis.io" level="INFO"/>
+    <logger name="org.apache.velocity" level="INFO"/>
+    <logger name="org.eclipse.jetty" level="INFO"/>
+    <logger name="io.undertow" level="INFO"/>
+    <logger name="org.xnio.nio" level="INFO"/>
+    <logger name="org.thymeleaf" level="INFO"/>
+    <logger name="springfox.documentation" level="INFO"/>
+    <logger name="org.hibernate.validator" level="INFO"/>
+    <logger name="com.netflix.loadbalancer" level="INFO"/>
+    <logger name="com.netflix.hystrix" level="INFO"/>
+    <logger name="com.netflix.zuul" level="INFO"/>
+    <logger name="de.codecentric" level="INFO"/>
+    <!-- cache INFO -->
+    <logger name="net.sf.ehcache" level="INFO"/>
+    <logger name="org.springframework.cache" level="INFO"/>
+    <!-- cloud -->
+    <logger name="org.apache" level="INFO"/>
+    <logger name="com.netflix.discovery" level="INFO"/>
+    <logger name="com.netflix.eureka" level="INFO"/>
+
+    <logger name="org.apache.jasper.compiler.TldLocationsCache.level" level="warn"/>
+    <logger name="org.apache.cxf.interceptor" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="webService"/>
+    </logger>
+
+    <!--dwe系统日志设置-->
+    <Logger name="com.dwsoft" level="DEBUG" />
+    
+    <logger name="com.dwsoft.webapp.sys.log.msg.LocalLogWriter" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="localLog"/>
+    </logger>
+
+    <!--性能相关的类 start-->
+    <logger name="org.hibernate.stat.internal.StatisticsImpl">
+        <level value="WARN"/>
+        <appender-ref ref="performanceLog"/>
+    </logger>
+    
+    <!--TRACE用于输出执行sql以及参数-->
+    <logger name="org.hibernate.engine.query.spi.HQLQueryPlan">
+        <level value="WARN"/>
+        <appender-ref ref="performanceLog"/>
+    </logger>
+    
+    <logger name="org.hibernate.engine.spi.QueryParameters">
+        <level value="WARN"/>
+        <appender-ref ref="performanceLog"/>
+    </logger>
+    
+    <!--性能相关的类 end-->
+
+    <root level="info">
+        <appender-ref ref="consoleLog"/>
+        <appender-ref ref="dwsoftLog"/>
+        <appender-ref ref="errorLog"/>
+    </root>
+</configuration>

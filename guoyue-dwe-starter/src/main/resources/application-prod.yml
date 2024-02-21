@@ -1,0 +1,43 @@
+#容器端口上下文配置
+server:
+  port: 8080
+  servlet:
+    context-path: /
+#数据源配置
+spring:
+  redis:
+    ##redis 单机环境配置
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    database: 0
+    ssl: false
+    ##redis 集群环境配置
+    #cluster:
+    #  nodes: 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003
+    #  commandTimeout: 5000
+  datasource:
+    # MySql
+    url: jdbc:mysql://127.0.0.1:3306/dwhr?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+  jpa:
+    #生产环境没有建表权限，所以...
+    generate-ddl: false
+    show-sql:  false
+    hibernate:
+      ddl-auto: validate
+#本项目相关配置
+dwsoft:
+  #登录授权相关配置
+  ltpa:
+    enabled: true
+    cookiename: LtpaToken
+    secret: OJ4PQYMMNCFeKbF0nqvpvHkBq5M=
+    expiration: 43200
+  #分布式锁配置
+  lock:
+    ##redis服务地址
+    address: redis://127.0.0.1:6379
+    password: 123456
+  

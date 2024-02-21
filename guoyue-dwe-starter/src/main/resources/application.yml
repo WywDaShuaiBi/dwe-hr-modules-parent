@@ -1,0 +1,110 @@
+
+spring: 
+  profiles: 
+    active: dev
+  application:
+    name: hr-server
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+  messages:
+    encoding: utf-8
+  devtools:
+      livereload:
+        enabled: false
+      restart:
+        enabled: true
+      remote:
+        debug:
+          enabled: false
+        restart:
+          enabled: false
+  session:
+    store-type: none
+  jackson:
+    date-format: yyyy-MM-dd' 'HH:mm
+    joda-date-time-format: yyyy-MM-dd' 'HH:mm
+    mapper:
+      infer-property-mutators: false
+  jpa:
+    open-in-view: true
+    generate-ddl: true
+    show-sql: false
+    database-platform: com.dwsoft.core.dialect.mysql.MySQL57Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect : com.dwsoft.core.dialect.mysql.MySQL57Dialect
+        enable_lazy_load_no_trans: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    #driver-class-name: org.postgresql.Driver
+    #driver-class-name: oracle.jdbc.OracleDriver
+    #driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    #druid 数据源专有配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    filters: stat
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+logging:
+  config: classpath:logback.xml
+  level:
+    com.dwsoft: debug 
+    
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+dwsoft:
+  devp:
+    #通过授权码来模拟任意用户登录，生产环境不要配置！
+    process-login-code: 
+  #xss配置
+  xss:
+    enabled: true
+    skip-url:
+  #OpenAPI相关配置，openAPI使用JWT鉴权，需要配置jwt
+  openapi:
+     enabled: true
+       
+  jwt:
+     secret: secret
+  redis:
+    serializer-type: protostuff
+  #分布式锁配置
+  lock:
+    ##是否启用分布式锁
+    enabled: false
+  hr:
+    salaryorg:
+      #是否启用多薪资组织，启用后，多个薪资组织之间数据隔离。
+      enable-muti-salaryorg: false
+    staff:
+      staffinfo:
+        #人事档案数据来源，可以是dingtalk， ekp，不设置则表示不从外部同步人事档案数据
+        datasource: 
+    attend:
+      report:
+        #考勤月报表数据来源，可以是dingtalk，将来需要实现 ekp、企业微信，或者自身实现的考勤模块等
+        datasource: dingtalk
+    paystub:
+       notify:
+          #工资条接收平台 dingtalk/ekp/inner , dwe待办消息机制还未完成，暂时使用这种方式发送消息到第三方平台
+          sender: dingtalk
+        
+

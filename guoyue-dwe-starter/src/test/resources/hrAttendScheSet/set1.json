@@ -1,0 +1,49 @@
+{
+	"id": "655f03ae1a79c19dfdbfdf41",
+	"name": "办公室行政班次模板",
+	"attendType": 1,
+	"restOnHolidays": true,
+	"weekDayScheduling": [
+		{
+			"weekDay": 1,
+			"weekDayName": "周一",
+			"shfitId": "655f03ae1a79c19dfdbf6f40",
+			"rest": false
+		},
+		{
+			"weekDay": 2,
+			"weekDayName": "周二",
+			"shfitId": "655f03ae1a79c19dfdbf6f40",
+			"rest": false
+		},
+		{
+			"weekDay": 3,
+			"weekDayName": "周三",
+			"shfitId": "655f03ae1a79c19dfdbf6f40",
+			"rest": false
+		},
+		{
+			"weekDay": 4,
+			"weekDayName": "周四",
+			"shfitId": "655f03ae1a79c19dfdbf6f40",
+			"rest": false
+		},
+		{
+			"weekDay": 5,
+			"weekDayName": "周五",
+			"shfitId": "655f03ae1a79c19dfdbf6f40",
+			"rest": false
+		},
+		{
+			"weekDay": 6,
+			"weekDayName": "周六",
+			"shfitId": "655f03ae1a79c19dfdbf6f40",
+			"rest": true
+		},
+		{
+			"weekDay": 7,
+			"weekDayName":"周日",
+			"rest": true
+		}
+	]
+}
