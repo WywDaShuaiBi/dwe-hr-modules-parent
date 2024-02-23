@@ -45,8 +45,14 @@ dwsoft:
   ekp:
      enable: true
      api_auth_type: BASIC
-     ekp_domain: http://localhost:8080/
+     ekp_domain: http://localhost:8080/ekp
      basic_account: ekp
      basic_password: abcABC123GYSG
+  yh:
+    attend:
+      ignoring_devices:
+
+    #忽略打卡机id
+
 
  
