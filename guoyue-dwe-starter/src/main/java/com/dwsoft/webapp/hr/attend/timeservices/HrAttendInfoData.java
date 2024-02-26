@@ -5,6 +5,7 @@ import com.dwsoft.core.annotation.DesignedTimingJob;
 import com.dwsoft.core.tool.utils.DateUtil;
 import com.dwsoft.webapp.hr.attend.api.command.clock.DeviceClockInParameter;
 
+import com.dwsoft.webapp.hr.attend.api.exception.AttendanceIllegalArgumentException;
 import com.dwsoft.webapp.hr.attend.dto.HrAttendData;
 import com.dwsoft.webapp.hr.attend.engine.AttendanceEngine;
 import com.dwsoft.webapp.hr.staff.entity.HrStaffInfo;
@@ -71,6 +72,7 @@ public class HrAttendInfoData {
         try {
             trigger0(context);
         }catch (Exception e) {
+            context.logError(e);
         }finally {
             isRunning = false;
         }
@@ -117,7 +119,7 @@ public class HrAttendInfoData {
                 if (countRs.next()) {
                     count = countRs.getInt("zs");
                 }
-                String sql = "select * from CHECKINOUT WHERE CHECKTIME >= ? AND CHECKTIME <= ? ORDER BY CHECKTIME ASC offset ? rows fetch next ? rows only;";
+                String sql = "select c.*,u.BADGENUMBER from CHECKINOUT c join USERINFO u on c.USERID=u.USERID WHERE c.CHECKTIME >= ? AND c.CHECKTIME <= ? ORDER BY c.CHECKTIME ASC offset ? rows fetch next ? rows only;";
                 Map<String, List<HrAttendData>> map = new HashMap<>();
                 do {
                     dataSet.prepareStatement(sql);
@@ -131,7 +133,8 @@ public class HrAttendInfoData {
                     while (rs.next()) {
                         isEmpty = false;
                         /*员工ID号*/
-                        String userID = rs.getString("USERID");
+                        String userID = rs.getString("BADGENUMBER");
+
                         Date fdCheckInDate = new Date(rs.getTimestamp("CHECKTIME").getTime());
                         String sn = rs.getString("sn");
                         /*如果是食堂打卡机则不同步数据*/
@@ -182,11 +185,15 @@ public class HrAttendInfoData {
                         HrStaffInfo hrStaffInfo = hrStaffInfoService.query(qHrStaffInfo.fdOaPerson.fdId.eq(sysOrgPerson.getFdId())).fetchFirst();
                        if (null !=hrStaffInfo){
                            for (HrAttendData hrAttendData :hrAttendDataList){
-                               addAttend(hrAttendData,hrStaffInfo);
+                               try {
+                                   addAttend(hrAttendData,hrStaffInfo);
+                               }catch (AttendanceIllegalArgumentException e){
+                                   break;
+                               }
                            }
                        }
                     } else {
-                        System.out.println("未找到员工ID：" + key);
+//                        System.out.println("未找到员工ID：" + key);
                         if (logger.isDebugEnabled()) {
                             logger.debug("未找到员工ID：" + key);
                         }
@@ -206,7 +213,7 @@ public class HrAttendInfoData {
                 DeviceClockInParameter clockInParameter = new DeviceClockInParameter();
                 clockInParameter.setClockTime(DateUtil.fromDate(hrAttendDatas.getFdClockInTime()));
                 clockInParameter.setDeviceId(hrAttendDatas.getFdAttendSn());
-                clockInParameter.setStaffId(hrStaffInfo.getId());
+                clockInParameter.setStaffId(hrStaffInfo.getFdId());
                 attendanceEngine.getIfAvailable().getRuntimeService().createAttendClock(clockInParameter);
         }
 }
