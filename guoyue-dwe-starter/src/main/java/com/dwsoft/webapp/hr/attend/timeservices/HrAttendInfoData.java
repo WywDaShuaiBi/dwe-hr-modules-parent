@@ -190,20 +190,23 @@ public class HrAttendInfoData {
                                                   }
                                               }
                     });
-                    SysOrgPerson sysOrgPerson = sysOrgPersonService.query(qSysOrgPerson.fdJobnumber.eq(key)).fetchFirst();
+
+                    SysOrgPerson sysOrgPerson = sysOrgPersonService.query(
+                            qSysOrgPerson.fdJobnumber.eq(key) ,
+                            qSysOrgPerson.fdIsAvailable.eq(true)
+                    ).fetchFirst();
+
                     if (null != sysOrgPerson) {
                         HrStaffInfo hrStaffInfo = hrStaffInfoService.query(qHrStaffInfo.fdOaPerson.fdId.eq(sysOrgPerson.getFdId())).fetchFirst();
                         if(hrStaffInfo!=null){
-                            HrAttendStaffHistory hrAttendStaffHistory = hrAttendStaffHistoryService.query(qHrAttendStaffHistory.staffId.eq(hrStaffInfo.getFdId())).fetchFirst();
-                            if (null !=hrAttendStaffHistory){
                                 for (HrAttendData hrAttendData :hrAttendDataList){
                                     try {
                                         addAttend(hrAttendData,hrStaffInfo);
-                                    }catch (AttendanceIllegalArgumentException e){
+                                    }catch (Exception e){
+                                        logger.error("数据写入时发生", e);
                                         continue;
                                     }
                                 }
-                            }
                         } else {
                             /* System.out.println("未找到员工ID：" + key);*/
                             if (logger.isDebugEnabled()) {
