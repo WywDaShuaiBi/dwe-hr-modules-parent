@@ -11,11 +11,11 @@ import org.springframework.core.Ordered;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Component;
 
+import com.dwsoft.core.json.deser.MillisOrLocalDateTimeDeserializer;
 import com.dwsoft.core.json.ser.StringOfLocalTimeSerializer;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
@@ -38,7 +38,9 @@ public class JacksonConfiguration implements Jackson2ObjectMapperBuilderCustomiz
         javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         
         javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateFormat)));
-        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateFormat)));
+		// javaTimeModule.addDeserializer(LocalDateTime.class, new
+		// LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateFormat)));
+		javaTimeModule.addDeserializer(LocalDateTime.class, new MillisOrLocalDateTimeDeserializer());
 
         javaTimeModule.addSerializer(LocalTime.class, new StringOfLocalTimeSerializer(DateTimeFormatter.ofPattern(timeFormat)));
         javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(timeFormat)));
