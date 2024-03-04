@@ -19,7 +19,6 @@ import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.access.vote.AuthenticatedVoter;
 import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
@@ -152,7 +151,7 @@ public class WebSecurityConfig {
                     "/antd/**",
                     "/.~~spring-boot!~/**",
                     "/.~~spring-boot!~",
-                    "/user/login");
+					"/user/login");
         }
 
         @Override
@@ -205,7 +204,7 @@ public class WebSecurityConfig {
                     "/api/cloud/getToken", //金蝶APP
                     "/login",
                     "/logout",
-					"/dingtalk/calendar/**")
+							"/dingtalk/calendar/**", "/openapi/auth/**")
 					.permitAll()
             .anyRequest()
             .authenticated()
