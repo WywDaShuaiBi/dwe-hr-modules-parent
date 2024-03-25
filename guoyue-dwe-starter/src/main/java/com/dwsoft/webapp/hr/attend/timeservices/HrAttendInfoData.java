@@ -143,7 +143,7 @@ public class HrAttendInfoData {
                     while (rs.next()) {
                         isEmpty = false;
                         /*员工ID号*/
-                        String userID = rs.getString("NAME");
+                        String userID = rs.getString("USERID");
 
                         Date fdCheckInDate = new Date(rs.getTimestamp("CHECKTIME").getTime());
                         String sn = rs.getString("sn");
