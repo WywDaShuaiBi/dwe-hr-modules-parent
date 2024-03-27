@@ -129,8 +129,7 @@ public class HrAttendInfoData {
                 if (countRs.next()) {
                     count = countRs.getInt("zs");
                 }
-                String sql = "select * from CHECKINOUT WHERE CHECKTIME >= ? AND CHECKTIME <= ? ORDER BY CHECKTIME ASC offset ? rows fetch next ? rows only;";
-                Map<String, List<HrAttendData>> map = new HashMap<>();
+                String sql = "select c.*,u.BADGENUMBER from CHECKINOUT c join USERINFO u on c.USERID=u.USERID WHERE c.CHECKTIME >= ? AND c.CHECKTIME <= ? ORDER BY c.CHECKTIME ASC offset ? rows fetch next ? rows only;";                Map<String, List<HrAttendData>> map = new HashMap<>();
                 do {
                     dataSet.prepareStatement(sql);
                     PreparedStatement pst = dataSet.getPreparedStatement();
@@ -143,7 +142,7 @@ public class HrAttendInfoData {
                     while (rs.next()) {
                         isEmpty = false;
                         /*员工ID号*/
-                        String userID = rs.getString("USERID");
+                        String userID = rs.getString("BADGENUMBER");
 
                         Date fdCheckInDate = new Date(rs.getTimestamp("CHECKTIME").getTime());
                         String sn = rs.getString("sn");
