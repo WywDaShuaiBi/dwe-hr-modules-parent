@@ -129,7 +129,7 @@ public class HrAttendInfoData {
                 if (countRs.next()) {
                     count = countRs.getInt("zs");
                 }
-                String sql = "select * from CHECKINOUT WHERE CHECKTIME >= ? AND CHECKTIME <= ? AND USERID = ? ORDER BY CHECKTIME ASC offset ? rows fetch next ? rows only;";
+                String sql = "select * from CHECKINOUT WHERE CHECKTIME >= ? AND CHECKTIME <= ? ORDER BY CHECKTIME ASC offset ? rows fetch next ? rows only;";
                 Map<String, List<HrAttendData>> map = new HashMap<>();
                 do {
                     dataSet.prepareStatement(sql);
