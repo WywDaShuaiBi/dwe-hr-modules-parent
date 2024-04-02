@@ -45,12 +45,13 @@ spring:
     #driver-class-name: oracle.jdbc.OracleDriver
     #driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
     #druid 数据源专有配置
-    initialSize: 5
+    initialSize: 10
     minIdle: 5
-    maxActive: 20
+    maxActive: 200
     maxWait: 60000
     timeBetweenEvictionRunsMillis: 60000
     minEvictableIdleTimeMillis: 300000
+    maxEvictableIdleTimeMillis: 600000
     validationQuery: SELECT 1 FROM DUAL
     testWhileIdle: true
     testOnBorrow: false
