@@ -129,7 +129,8 @@ public class HrAttendInfoData {
                 if (countRs.next()) {
                     count = countRs.getInt("zs");
                 }
-                String sql = "select c.*,u.BADGENUMBER from CHECKINOUT c join USERINFO u on c.USERID=u.USERID WHERE c.CHECKTIME >= ? AND c.CHECKTIME <= ? ORDER BY c.CHECKTIME ASC offset ? rows fetch next ? rows only;";                Map<String, List<HrAttendData>> map = new HashMap<>();
+                String sql = "select c.*,u.BADGENUMBER from CHECKINOUT c join USERINFO u on c.USERID=u.USERID WHERE c.CHECKTIME >= ? AND c.CHECKTIME <= ? ORDER BY c.CHECKTIME ASC offset ? rows fetch next ? rows only;";
+                Map<String, List<HrAttendData>> map = new HashMap<>();
                 do {
                     dataSet.prepareStatement(sql);
                     PreparedStatement pst = dataSet.getPreparedStatement();
@@ -228,6 +229,17 @@ public class HrAttendInfoData {
     public void addAttend(HrAttendData hrAttendDatas,HrStaffInfo hrStaffInfo){
                 DeviceClockInParameter clockInParameter = new DeviceClockInParameter();
                 clockInParameter.setClockTime(DateUtil.fromDate(hrAttendDatas.getFdClockInTime()));
+                    if (hrAttendDatas.getFdAttendSn().equals("FAC1235000521")){
+                        clockInParameter.setDeviceName("1号楼左边考勤机");
+                    } else if (hrAttendDatas.getFdAttendSn().equals("FAC1235000236")) {
+                        clockInParameter.setDeviceName("1号楼中间考勤机");
+                    }else if (hrAttendDatas.getFdAttendSn().equals("FAC1235000251")) {
+                        clockInParameter.setDeviceName("1号楼右边考勤机");
+                    }else if (hrAttendDatas.getFdAttendSn().equals("FAC1235000530")) {
+                        clockInParameter.setDeviceName("生产考勤机");
+                    }else if (hrAttendDatas.getFdAttendSn().equals("CJDE233961238")) {
+                        clockInParameter.setDeviceName("主考勤机");
+                    }
                 clockInParameter.setDeviceId(hrAttendDatas.getFdAttendSn());
                 clockInParameter.setStaffId(hrStaffInfo.getFdId());
                 transactionHelper.withNewTransaction(() -> {
