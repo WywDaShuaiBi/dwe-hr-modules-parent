@@ -1,0 +1,1 @@
+java -server -Xms1024M -Xmx2048M -XX:PermSize=512M -XX:MaxPermSize=1024M -XX:-UseGCOverheadLimit -XX:+UseParallelOldGC -cp "lib/*" com.dwsoft.webapp.Starter
